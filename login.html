@@ -1,11 +1,71 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <!-- 导读layui的样式 -->
+    <link rel="stylesheet" href="./assets/lib/layui/css/layui.css">
+    <!-- 导入自己的样式-->
+    <link rel="stylesheet" href="./assets/css/login.css">
+
 </head>
+
 <body>
-   
+    <!-- 头部的logo区域 -->
+    <div class="layui-main">
+        <img src="./assets/images/logo.png" alt="">
+    </div>
+    <!-- 登录区域 -->
+    <div class="loginBox">
+        <img src="./assets/images/login_title.png" alt="">
+        <form class="linkLogin">
+            <div class="inptBox">
+                <i class="layui-icon layui-icon-username icom" style="font-size: 30px; color: #1E9FFF;"></i>
+                <input type="text" name="username" lay-verify="required" placeholder="请输入账号" autocomplete="off"
+                    class="layui-input user">
+            </div>
+            <div class="inptBox">
+                <i class="layui-icon layui-icon-password icom" style="font-size: 30px; color: #1E9FFF;"></i>
+                <input type="password" name="password" lay-verify="required" placeholder="请输入密码" autocomplete="off"
+                    class="layui-input psw">
+            </div>
+            <button type="submit" class="layui-btn layui-btn-normal btn">登录</button>
+            <p class="re"><a href="javascript:;" id="link_login">注册登录</a></p>
+        </form>
+
+        <!-- 注册区域 -->
+        <form action="" class="linkRe" style="display: none;">
+            <div class="inptBox">
+                <i class="layui-icon layui-icon-username icom" style="font-size: 30px; color: #1E9FFF;"></i>
+                <input type="text" name="username" lay-verify="required" placeholder="请输入账号" autocomplete="off"
+                    class="layui-input user" id="aaa">
+            </div>
+            <div class="inptBox">
+                <i class="layui-icon layui-icon-password icom" style="font-size: 30px; color: #1E9FFF;"></i>
+                <input type="password" name="password" lay-verify="required" placeholder="请输入密码" autocomplete="off"
+                    class="layui-input psw" id="bbb">
+            </div>
+            <div class="inptBox">
+                <i class="layui-icon layui-icon-password icom" style="font-size: 30px; color: #1E9FFF;"></i>
+                <input type="password" name="password" lay-verify="required" placeholder="确认密码" autocomplete="off"
+                    class="layui-input psw" id="ccc">
+            </div>
+            <button type="submit" class="layui-btn layui-btn-normal btn">注册</button>
+            <p class="re"><a href="javascript:;" id="link_re">登录</a></p>
+        </form>
+
+    </div>
+
 </body>
+<!-- 导入Layui文件 -->
+<script src='./assets/lib/layui/layui.all.js'></script>
+<!-- 导入JQurey 文件 -->
+<script src="./assets/lib/jquery.js"></script>
+<!-- 导入自己封装的 baseAPI -->
+<script src="./assets/js/base.js"></script>
+<!-- 导入Javacsript -->
+<script src="./assets/js/login.js"></script>
+
 </html>

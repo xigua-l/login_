@@ -1,74 +1,157 @@
-$(function() {
+$(function () {
   // 点击“去注册账号”的链接
-  $('#link_reg').on('click', function() {
-    $('.login-box').hide()
-    $('.reg-box').show()
+  $('#link_login').on('click', function () {
+    $('.linkLogin').hide()
+    $(".linkRe").show()
+
+  })
+  // 点击"登录"的链接
+  $("#link_re").on("click", function () {
+    $(".linkRe").hide()
+    $('.linkLogin').show()
   })
 
-  // 点击“去登录”的链接
-  $('#link_login').on('click', function() {
-    $('.login-box').show()
-    $('.reg-box').hide()
-  })
+  // layui 中获取form对象
+  // let form = layui.form
+  //通过form.verify()函数自定义效验规则
+  // form.verify({
+  //   psw: [/^[/S]{6,12}$/, '密码必须6-12位且不包含空格']
+  // })
 
-  // 从 layui 中获取 form 对象
-  var form = layui.form
-  var layer = layui.layer
-  // 通过 form.verify() 函数自定义校验规则
-  form.verify({
-    // 自定义了一个叫做 pwd 校验规则
-    pwd: [/^[\S]{6,12}$/, '密码必须6到12位，且不能出现空格'],
-    // 校验两次密码是否一致的规则
-    repwd: function(value) {
-      // 通过形参拿到的是确认密码框中的内容
-      // 还需要拿到密码框中的内容
-      // 然后进行一次等于的判断
-      // 如果判断失败,则return一个提示消息即可
-      var pwd = $('.reg-box [name=password]').val()
-      if (pwd !== value) {
-        return '两次密码不一致！'
+
+  const regUserName = /^[a-zA-Z]{6,12}$/
+  const regPassword = /^[\w\s]{6,12}$/
+
+  let btnlogin = document.querySelector(".btn")
+
+  let userVla = document.querySelector(".user")
+  let pswVla = document.querySelector(".psw")
+  // let pswdVla = document.querySelector(".pswd")
+
+  let aaa = document.querySelector("#aaa")
+  let bbb = document.querySelector("#bbb")
+  let ccc = document.querySelector("#ccc")
+
+  //判断表单值是否为空
+  function inputRed(ele, val) {
+    ele.addEventListener("click", function () {
+
+
+      if (val.value.length <= 0) {
+
+        val.style.border = " 1px solid red"
+
+      } else {
+        val.style.border = "1px solid #ccc"
       }
-    }
-  })
-
-  // 监听注册表单的提交事件
-  $('#form_reg').on('submit', function(e) {
-    // 1. 阻止默认的提交行为
-    e.preventDefault()
-    // 2. 发起Ajax的POST请求
-    var data = {
-      username: $('#form_reg [name=username]').val(),
-      password: $('#form_reg [name=password]').val()
-    }
-    $.post('/api/reguser', data, function(res) {
-      if (res.status !== 0) {
-        return layer.msg(res.message)
-      }
-      layer.msg('注册成功，请登录！')
-      // 模拟人的点击行为
-      $('#link_login').click()
     })
+  }
+
+  //正则表达式
+  function re(element, reg, layout) {
+    element.addEventListener("blur", function () {
+
+      if (reg.test(this.value)) {
+        // $(this).next().html("格式正确")
+        layui.use('layer', function () {
+          var layer = layui.layer;
+
+          layer.msg('格式正确✔', { icon: 6, time: 1500 });
+        });
+
+      } else {
+        // $(this).next().html(layout)
+        layui.use('layer', function () {
+          var layer = layui.layer;
+          layer.msg(layout, { icon: 5, time: 1500 });
+        });
+      }
+
+
+    })
+
+
+  }
+
+
+  // 登录验证
+  re(userVla, regUserName, "请输入6-12位英文字母❌")
+  re(pswVla, regPassword, "密码必须6-12位且不包含空格❌")
+  // 调用是否为空的函数
+  inputRed(btnlogin, userVla)
+  inputRed(btnlogin, pswVla)
+  // 注册验证
+  re(aaa, regUserName, "请输入6-12位英文字母❌")
+  re(bbb, regPassword, "密码必须6-12位且不包含空格❌")
+
+
+  // 验证两次密码是否一致
+  ccc.addEventListener("blur", function () {
+
+    if (bbb.value.length <= 0) {
+      return
+    }
+    if (bbb.value === ccc.value) {
+
+      layui.use('layer', function () {
+        var layer = layui.layer;
+
+        layer.msg('输入正确✔', { icon: 6, time: 1500 });
+      });
+    } else {
+      layui.use('layer', function () {
+        var layer = layui.layer;
+        layer.msg("两次密码不一致", { icon: 5, time: 1500 });
+      });
+    }
+
   })
 
-  // 监听登录表单的提交事件
-  $('#form_login').submit(function(e) {
-    // 阻止默认提交行为
+  // 监听注册表单提交事件
+  $(".linkRe").on("submit", function (e) {
     e.preventDefault()
     $.ajax({
-      url: '/api/login',
-      method: 'POST',
-      // 快速获取表单中的数据
-      data: $(this).serialize(),
-      success: function(res) {
+      type: "post",
+      url: "/api/reguser",
+      data: { username: $("#aaa").val(), password: $("#bbb").val() },
+      success: function (res) {
         if (res.status !== 0) {
-          return layer.msg('登录失败！')
+          layui.use('layer', function () {
+            var layer = layui.layer;
+            layer.msg(res.message, { time: 1500 });
+          });
+          return
         }
-        layer.msg('登录成功！')
-        // 将登录成功得到的 token 字符串，保存到 localStorage 中
-        localStorage.setItem('token', res.token)
-        // 跳转到后台主页
-        location.href = '/index.html'
+        layui.use('layer', function () {
+          var layer = layui.layer;
+          layer.msg(res.message, { time: 1500 });
+          $("#link_re").click()
+        });
       }
     })
   })
+  // 监听登录表单提交事件
+  $(".linkLogin").on("submit", function (e) {
+    e.preventDefault()
+    $.ajax({
+      type: "post",
+      url: "/api/login",
+      data: { username: $(".user").val(), password: $(".psw").val() },
+      success: function (res) {
+        if (res.status !== 0) {
+          layui.use('layer', function () {
+            var layer = layui.layer;
+            layer.msg(res.message, { time: 1500 });
+          });
+          return
+        }
+
+        // 吧token值存到本地存储中
+        localStorage.setItem("token", res.token)
+        // location.href="http://wwww.baidu.com"
+      }
+    })
+  }) 
 })
+
+
